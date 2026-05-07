@@ -9,21 +9,22 @@ from telegram.ext import (
 
 import asyncio
 
+# YOUR BOT TOKEN
 TOKEN = "8639818064:AAFtl0XBlHj_T3j4OPilExz0NxE_VhuvLf4"
 
-# Store group/user IDs
+# Store users/groups
 chat_ids = set()
 
-# Start command
+# /start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     chat_id = update.effective_chat.id
 
-    # Save user/group
+    # Save user/group ID
     chat_ids.add(chat_id)
 
     await update.message.reply_text(
-        "✅ Automatic advertisement enabled."
+        "✅ Automatic advertisement messages enabled."
     )
 
 # Save all chats/groups automatically
@@ -31,9 +32,10 @@ async def save_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     chat_id = update.effective_chat.id
 
+    # Save ID
     chat_ids.add(chat_id)
 
-# Auto advertisement every 60 minutes
+# Send advertisement every 60 minutes
 async def auto_message(app):
 
     while True:
@@ -79,14 +81,16 @@ async def auto_message(app):
         # 60 minutes
         await asyncio.sleep(3600)
 
+# Main function
 async def main():
 
+    # Create bot
     app = ApplicationBuilder().token(TOKEN).build()
 
-    # /start command
+    # Commands
     app.add_handler(CommandHandler("start", start))
 
-    # Detect all chats/groups
+    # Save chats/groups
     app.add_handler(
         MessageHandler(filters.ALL, save_chat)
     )
@@ -96,6 +100,7 @@ async def main():
 
     print("✅ Bot Running...")
 
+    # Start polling
     await app.run_polling()
 
 # Run bot
