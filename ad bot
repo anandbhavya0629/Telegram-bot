@@ -1,0 +1,102 @@
+from telegram import Update
+from telegram.ext import (
+    ApplicationBuilder,
+    CommandHandler,
+    ContextTypes,
+    MessageHandler,
+    filters,
+)
+
+import asyncio
+
+TOKEN = "8639818064:AAFtl0XBlHj_T3j4OPilExz0NxE_VhuvLf4"
+
+# Store group/user IDs
+chat_ids = set()
+
+# Start command
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    chat_id = update.effective_chat.id
+
+    # Save user/group
+    chat_ids.add(chat_id)
+
+    await update.message.reply_text(
+        "✅ Automatic advertisement enabled."
+    )
+
+# Save all chats/groups automatically
+async def save_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    chat_id = update.effective_chat.id
+
+    chat_ids.add(chat_id)
+
+# Auto advertisement every 60 minutes
+async def auto_message(app):
+
+    while True:
+
+        for chat_id in chat_ids:
+
+            try:
+
+                await app.bot.send_message(
+                    chat_id=chat_id,
+                    text="""
+🚀 SOCIAL MEDIA SERVICES 🔥
+
+📸 Instagram
+• Unbann / Ban
+• Shielding
+• Lookups
+• Gen & Non-Gen Claims
+
+📘 Facebook
+• Unbann / Ban
+• Shielding
+• Lookups
+• Gen & Non-Gen Claims
+
+🎵 TikTok — Unbann / Ban
+👻 Snapchat — Unbann / Ban
+🟢 WhatsApp — Unbann / Ban
+
+💼 Business Manager Services
+
+🔒 Trusted • ⚡ Fast
+
+🤝 MM: @mrgod @laugh @Cold @thon
+
+📩 DM: @The_Legend_1568
+"""
+                )
+
+            except Exception as e:
+                print(e)
+
+        # 60 minutes
+        await asyncio.sleep(3600)
+
+async def main():
+
+    app = ApplicationBuilder().token(TOKEN).build()
+
+    # /start command
+    app.add_handler(CommandHandler("start", start))
+
+    # Detect all chats/groups
+    app.add_handler(
+        MessageHandler(filters.ALL, save_chat)
+    )
+
+    # Start auto messaging
+    asyncio.create_task(auto_message(app))
+
+    print("✅ Bot Running...")
+
+    await app.run_polling()
+
+# Run bot
+asyncio.run(main())
