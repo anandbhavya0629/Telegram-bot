@@ -14,7 +14,7 @@ from telegram.ext import (
 load_dotenv()
 
 # Get bot token from environment variable
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TOKEN = os.getenv(""8639818064:AAFtl0XBlHj_T3j4OPilExz0NxE_VhuvLf4"")
 
 # Validate token exists
 if not TOKEN:
